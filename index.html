@@ -12,19 +12,34 @@ const lucaWords = [
 const button = document.querySelector("button");
 const result = document.getElementById("result");
 
+// 今日見られるかチェック
 function canShowToday() {
   const lastDate = localStorage.getItem("lucaDate");
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
   return lastDate !== today;
 }
 
+// メッセージを表示
 function showLuca() {
   if (!canShowToday()) {
-    alert("今日の斑鳩ルカはもう見ました！");
+    // 今日もう見た場合は画面上に "(・・・・・・・・・)" を表示
+    result.textContent = "(・・・・・・・・・)";
+    result.style.opacity = 1;
+
+    // ボタンは無効化
+    button.disabled = true;
+    button.style.opacity = 0.5;
     return;
   }
 
+  // ボタンをすぐ無効化して連打防止
+  button.disabled = true;
+  button.style.opacity = 0.5;
+
+  // ランダムにメッセージ選択
   const text = lucaWords[Math.floor(Math.random() * lucaWords.length)];
+
+  // フェードアニメーション
   result.style.opacity = 0;
   setTimeout(() => {
     result.textContent = text;
@@ -34,15 +49,15 @@ function showLuca() {
   // 今日の日付を保存
   const today = new Date().toISOString().split("T")[0];
   localStorage.setItem("lucaDate", today);
-
-  // ボタンを無効化
-  button.disabled = true;
-  button.style.opacity = 0.5;
 }
 
 // ページ読み込み時にボタン状態を確認
-if (!canShowToday()) {
-  button.disabled = true;
-  button.style.opacity = 0.5;
-}
+window.addEventListener("load", () => {
+  if (!canShowToday()) {
+    button.disabled = true;
+    button.style.opacity = 0.5;
+    result.textContent = "(・・・・・・・・・)";
+    result.style.opacity = 1;
+  }
+});
 </script>
