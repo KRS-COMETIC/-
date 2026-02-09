@@ -63,45 +63,60 @@ document.addEventListener("DOMContentLoaded", () => {
   // クリック回数を保持
   let clickCount = parseInt(localStorage.getItem("lucaClicks") || "0", 10);
 
+  function chaosEffect() {
+    document.body.innerHTML = ""; // ページを白紙化
+    const container = document.createElement("div");
+    container.style.fontSize = "24px";
+    container.style.fontFamily = "monospace";
+    container.style.color = "lime";
+    container.style.background = "#000";
+    container.style.height = "100vh";
+    container.style.display = "flex";
+    container.style.justifyContent = "center";
+    container.style.alignItems = "center";
+    container.style.flexDirection = "column";
+    document.body.appendChild(container);
+
+    let count = 0;
+    const interval = setInterval(() => {
+      container.textContent = "";
+      for(let i=0;i<50;i++){
+        const charCode = 0x30 + Math.floor(Math.random()*95); // ASCII 0x30〜0x7E
+        container.textContent += String.fromCharCode(charCode);
+      }
+      count++;
+      if(count > 30){
+        clearInterval(interval);
+        container.textContent = "ルカは怒って帰っちゃいました…";
+        setTimeout(() => {
+          try { window.close(); } catch(e){}
+        }, 3000);
+      }
+    }, 100);
+  }
+
   function showMessage() {
     clickCount++;
     localStorage.setItem("lucaClicks", clickCount);
 
     switch(clickCount) {
       case 1:
-        // 1回目：ランダム
         result.style.fontSize = "16px";
         result.textContent = lucaWords[Math.floor(Math.random() * lucaWords.length)];
         result.style.opacity = 1;
         break;
       case 2:
-        result.style.fontSize = "25px";
+        result.style.fontSize = "16px";
         result.textContent = "(もう終わりだ・・・)";
         result.style.opacity = 1;
         break;
       case 3:
-        result.style.fontSize = "40px";
+        result.style.fontSize = "16px";
         result.textContent = "(・・・・・・)";
         result.style.opacity = 1;
         break;
-      case 4:
-        result.style.fontSize = "60px";
-        result.textContent = "(・・・っつ💢)";
-        result.style.opacity = 1;
-        button.disabled = true;
-        // 3秒間表示して閉じようとする
-        setTimeout(() => {
-          try {
-            window.close(); // タブを閉じる（自動で閉じられる場合のみ）
-          } catch(e) {
-            // 閉じられない場合は何もしない
-          }
-        }, 3000);
-        break;
       default:
-        result.style.fontSize = "16px";
-        result.textContent = "(ルカは怒って帰っちゃいました…)";
-        result.style.opacity = 1;
+        chaosEffect(); // 4回目以降でノイズ化＋帰る演出
         button.disabled = true;
         break;
     }
