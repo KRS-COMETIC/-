@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>今日の斑鳩ルカ</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+        "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      background: linear-gradient(180deg, #0f1a2b, #1c2f4a);
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      width: 90%;
+      max-width: 380px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 22px;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-bottom: 20px;
+    }
+
+    .luka {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    #result {
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 4em;
+      margin: 20px 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #6fb1ff, #8fd3f4);
+      color: #0f1a2b;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    footer {
+      margin-top: 16px;
+      font-size: 11px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="luka">❄️</div>
+    <div class="title">今日の斑鳩ルカ</div>
+    <div class="subtitle">Ikaruga Luca says…</div>
+
+    <div id="result"> </div>
+
+    <button onclick="showLuca()">今日の斑鳩</button>
+
+    <footer>※非公式ファンコンテンツ</footer>
+  </div>
+
+  <script>
+    const lucaWords = [
+      "……無理はしない。今日はそれでいい。",
+      "周りに合わせすぎ。少し、自分を優先して。",
+      "静かな時間が、答えをくれると思う。",
+      "今は準備のとき。焦る必要はない。",
+      "やるなら、最後まで。中途半端は嫌い。",
+      "今日は、ちゃんと休みなよ。",
+      "大丈夫。思ってるより、ちゃんと出来てる。"
+    ];
+
+    function showLuca() {
+      const result = document.getElementById("result");
+      const text = lucaWords[Math.floor(Math.random() * lucaWords.length)];
+      result.style.opacity = 0;
+      setTimeout(() => {
+        result.textContent = text;
+        result.style.opacity = 1;
+      }, 150);
+    }
+  </script>
+</body>
+</html>
