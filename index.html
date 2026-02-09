@@ -1,157 +1,108 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>今日の斑鳩ルカ</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
-        "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-      background: linear-gradient(180deg, #0f1a2b, #1c2f4a);
-      color: #ffffff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .card {
-      width: 90%;
-      max-width: 380px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(8px);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      text-align: center;
-    }
-
-    .title {
-      font-size: 22px;
-      letter-spacing: 0.1em;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-bottom: 20px;
-    }
-
-    .luka {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-
-    #result {
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 4em;
-      margin: 20px 0;
-      opacity: 0;
-      transition: opacity 0.3s ease, color 0.3s ease;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #6fb1ff, #8fd3f4);
-      color: #0f1a2b;
-      font-weight: bold;
-      cursor: pointer;
-      transition: opacity 0.2s ease, transform 0.1s ease;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    button:disabled {
-      cursor: default;
-      opacity: 0.5;
-    }
-
-    footer {
-      margin-top: 16px;
-      font-size: 11px;
-      opacity: 0.5;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日の斑鳩ルカ</title>
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    background: linear-gradient(180deg, #0f1a2b, #1c2f4a);
+    color: #fff;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .card {
+    width: 90%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    text-align: center;
+  }
+  .title { font-size: 22px; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; opacity: 0.7; margin-bottom: 20px; }
+  .luka { font-size: 40px; margin-bottom: 10px; }
+  #result { font-size: 16px; line-height: 1.6; min-height: 4em; margin: 20px 0; opacity: 0; transition: opacity 0.3s ease, font-size 0.3s ease; }
+  button { width: 100%; padding: 14px; font-size: 16px; border: none; border-radius: 999px; background: linear-gradient(90deg,#6fb1ff,#8fd3f4); color: #0f1a2b; font-weight: bold; cursor: pointer; transition: opacity 0.2s ease, transform 0.1s ease; }
+  button:active { transform: scale(0.98); }
+  button:disabled { cursor: default; opacity: 0.5; }
+  footer { margin-top: 16px; font-size: 11px; opacity: 0.5; }
+</style>
 </head>
-
 <body>
-  <div class="card">
-    <div class="luka">❄️</div>
-    <div class="title">今日の斑鳩ルカ</div>
-    <div class="subtitle">Ikaruga Luca says…</div>
+<div class="card">
+  <div class="luka">❄️</div>
+  <div class="title">今日の斑鳩ルカ</div>
+  <div class="subtitle">Ikaruga Luca says…</div>
+  <div id="result"></div>
+  <button id="lucaButton">今日の斑鳩</button>
+  <footer>※非公式ファンコンテンツ</footer>
+</div>
 
-    <div id="result"> </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const lucaWords = [
+    "……無理はしない。今日はそれでいい。",
+    "周りに合わせすぎ。少し、自分を優先して。",
+    "静かな時間が、答えをくれると思う。",
+    "今は準備のとき。焦る必要はない。",
+    "やるなら、最後まで。中途半端は嫌い。",
+    "今日は、ちゃんと休みなよ。",
+    "大丈夫。思ってるより、ちゃんと出来てる。"
+  ];
 
-    <button id="lucaButton">今日の斑鳩</button>
+  const button = document.getElementById("lucaButton");
+  const result = document.getElementById("result");
 
-    <footer>※非公式ファンコンテンツ</footer>
-  </div>
+  // クリック回数を保持
+  let clickCount = parseInt(localStorage.getItem("lucaClicks") || "0", 10);
 
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const lucaWords = [
-      "……無理はしない。今日はそれでいい。",
-      "周りに合わせすぎ。少し、自分を優先して。",
-      "静かな時間が、答えをくれると思う。",
-      "今は準備のとき。焦る必要はない。",
-      "やるなら、最後まで。中途半端は嫌い。",
-      "今日は、ちゃんと休みなよ。",
-      "大丈夫。思ってるより、ちゃんと出来てる。"
-    ];
+  function showMessage() {
+    clickCount++;
+    localStorage.setItem("lucaClicks", clickCount);
 
-    const button = document.getElementById("lucaButton");
-    const result = document.getElementById("result");
-
-    function canShowToday() {
-      const lastDate = localStorage.getItem("lucaDate");
-      const today = new Date().toISOString().split("T")[0];
-      return lastDate !== today;
-    }
-
-    function showLuca() {
-      if (!canShowToday()) {
-        result.textContent = "(・・・・・・・・・)";
-        result.style.color = "rgba(255, 255, 255, 0.4)"; // 薄く淡く表示
-        result.style.opacity = 1;
-        button.disabled = true;
-        return;
-      }
-
-      button.disabled = true;
-
+    if (clickCount === 1) {
+      // 1回目：ランダム
       const text = lucaWords[Math.floor(Math.random() * lucaWords.length)];
-
-      result.style.opacity = 0;
-      result.style.color = "#ffffff"; // 通常の白色
-      setTimeout(() => {
-        result.textContent = text;
-        result.style.opacity = 1;
-      }, 150);
-
-      const today = new Date().toISOString().split("T")[0];
-      localStorage.setItem("lucaDate", today);
-    }
-
-    button.addEventListener("click", showLuca);
-
-    if (!canShowToday()) {
-      button.disabled = true;
-      result.textContent = "(・・・・・・・・・)";
-      result.style.color = "rgba(255, 255, 255, 0.4)";
+      result.style.fontSize = "16px";
+      result.textContent = text;
       result.style.opacity = 1;
+    } else if (clickCount === 2) {
+      // 2回目
+      result.style.fontSize = "30px";
+      result.textContent = "(今日はもう終わりだ・・・)";
+      result.style.opacity = 1;
+    } else if (clickCount === 3) {
+      // 3回目
+      result.style.fontSize = "45px";
+      result.textContent = "(・・・・・・)";
+      result.style.opacity = 1;
+    } else if (clickCount === 4) {
+      // 4回目：大きく3秒表示してタブ閉じ
+      result.style.fontSize = "60px";
+      result.textContent = "(・・・っつ💢)";
+      result.style.opacity = 1;
+      button.disabled = true;
+      setTimeout(() => {
+        window.close(); // タブを閉じる
+      }, 4000);
+    } else {
+      // それ以上は押せない
+      result.style.fontSize = "16px";
+      result.textContent = "(ルカは怒って帰っちゃいました…)";
+      result.style.opacity = 1;
+      button.disabled = true;
     }
-  });
-  </script>
+  }
+
+  button.addEventListener("click", showMessage);
+});
+</script>
 </body>
 </html>
