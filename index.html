@@ -67,46 +67,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let clickCount = parseInt(localStorage.getItem("lucaClicks") || "0", 10);
 
-  function subtleChaos() {
-    // 背景とカードを少し揺らす演出だけ残す
+  function chaosAnimation() {
     let chaosCount = 0;
+    const maxChaos = 40;
     const chaosInterval = setInterval(() => {
-      body.style.background = `linear-gradient(180deg, rgba(${15+Math.random()*10},${26+Math.random()*10},${43+Math.random()*10},1), rgba(${28+Math.random()*10},${47+Math.random()*10},${74+Math.random()*10},1))`;
-      card.style.transform = `translate(${(Math.random()-0.5)*4}px, ${(Math.random()-0.5)*4}px)`; 
+      // 背景ノイズ演出
+      body.style.background = `linear-gradient(180deg, rgba(${15+Math.random()*30},${26+Math.random()*30},${43+Math.random()*30},1), rgba(${28+Math.random()*30},${47+Math.random()*30},${74+Math.random()*30},1))`;
+      // カード微揺れ
+      card.style.transform = `translate(${(Math.random()-0.5)*10}px, ${(Math.random()-0.5)*10}px) rotate(${(Math.random()-0.5)*5}deg)`;
       chaosCount++;
-      if (chaosCount > 30) {
+      if (chaosCount > maxChaos) {
         clearInterval(chaosInterval);
+        // 最後のメッセージ表示
+        result.style.fontSize = "20px";
         result.textContent = "ルカは怒って帰っちゃいました…";
         result.style.opacity = 1;
-        setTimeout(() => {
-          try { window.close(); } catch(e){}
-        }, 3000);
+        // 3秒後にタブを閉じる
+        setTimeout(() => { try{window.close();}catch(e){} }, 3000);
       }
-    }, 100);
+    }, 80);
   }
 
   function showMessage() {
     clickCount++;
     localStorage.setItem("lucaClicks", clickCount);
 
-    switch(clickCount) {
+    switch(clickCount){
       case 1:
         result.style.fontSize = "16px";
         result.textContent = lucaWords[Math.floor(Math.random() * lucaWords.length)];
         result.style.opacity = 1;
         break;
       case 2:
-        result.style.fontSize = "16px";
-        result.textContent = "(もう終わりだ・・・)";
+        result.style.fontSize = "20px";
+        result.textContent = "(今日は終わりだ・・・)";
         result.style.opacity = 1;
         break;
       case 3:
-        result.style.fontSize = "16px";
+        result.style.fontSize = "32px";
         result.textContent = "(・・・・・・)";
         result.style.opacity = 1;
         break;
+      case 4:
+        result.style.fontSize = "64px";
+        result.textContent = "(・・・っつ💢)";
+        result.style.opacity = 1;
+        button.disabled = true;
+        setTimeout(() => {
+          chaosAnimation();
+        }, 3000); // 3秒大きめ表示
+        break;
       default:
-        subtleChaos(); // 背景・カード演出だけ
         button.disabled = true;
         break;
     }
