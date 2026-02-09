@@ -67,37 +67,43 @@ document.addEventListener("DOMContentLoaded", () => {
     clickCount++;
     localStorage.setItem("lucaClicks", clickCount);
 
-    if (clickCount === 1) {
-      // 1回目：ランダム
-      const text = lucaWords[Math.floor(Math.random() * lucaWords.length)];
-      result.style.fontSize = "16px";
-      result.textContent = text;
-      result.style.opacity = 1;
-    } else if (clickCount === 2) {
-      // 2回目
-      result.style.fontSize = "30px";
-      result.textContent = "(今日はもう終わりだ・・・)";
-      result.style.opacity = 1;
-    } else if (clickCount === 3) {
-      // 3回目
-      result.style.fontSize = "45px";
-      result.textContent = "(・・・・・・)";
-      result.style.opacity = 1;
-    } else if (clickCount === 4) {
-      // 4回目：大きく3秒表示してタブ閉じ
-      result.style.fontSize = "60px";
-      result.textContent = "(・・・っつ💢)";
-      result.style.opacity = 1;
-      button.disabled = true;
-      setTimeout(() => {
-        window.close(); // タブを閉じる
-      }, 4000);
-    } else {
-      // それ以上は押せない
-      result.style.fontSize = "16px";
-      result.textContent = "(ルカは怒って帰っちゃいました…)";
-      result.style.opacity = 1;
-      button.disabled = true;
+    switch(clickCount) {
+      case 1:
+        // 1回目：ランダム
+        result.style.fontSize = "16px";
+        result.textContent = lucaWords[Math.floor(Math.random() * lucaWords.length)];
+        result.style.opacity = 1;
+        break;
+      case 2:
+        result.style.fontSize = "25px";
+        result.textContent = "(もう終わりだ・・・)";
+        result.style.opacity = 1;
+        break;
+      case 3:
+        result.style.fontSize = "40px";
+        result.textContent = "(・・・・・・)";
+        result.style.opacity = 1;
+        break;
+      case 4:
+        result.style.fontSize = "60px";
+        result.textContent = "(・・・っつ💢)";
+        result.style.opacity = 1;
+        button.disabled = true;
+        // 3秒間表示して閉じようとする
+        setTimeout(() => {
+          try {
+            window.close(); // タブを閉じる（自動で閉じられる場合のみ）
+          } catch(e) {
+            // 閉じられない場合は何もしない
+          }
+        }, 3000);
+        break;
+      default:
+        result.style.fontSize = "16px";
+        result.textContent = "(ルカは怒って帰っちゃいました…)";
+        result.style.opacity = 1;
+        button.disabled = true;
+        break;
     }
   }
 
